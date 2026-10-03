@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Hourglass · digital twin</title>
+    <meta name="description" content="A physically simulated 3D hourglass timer: every grain is a rigid body in the Rapier physics engine." />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M7 3h18v3c0 4-4 7-7 10 3 3 7 6 7 10v3H7v-3c0-4 4-7 7-10-3-3-7-6-7-10z' fill='%23e2b26a'/%3E%3C/svg%3E" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <div id="viewport" aria-label="3D hourglass"></div>
+
+    <aside class="panel" id="panel">
+      <header class="brand">
+        <h1>Hourglass</h1>
+        <span class="tag">digital twin</span>
+      </header>
+
+      <section class="readout" aria-live="polite">
+        <div class="time" id="time">1:00</div>
+        <div class="state" id="state">Pouring sand…</div>
+        <div class="bar" role="progressbar" aria-label="Elapsed" aria-valuemin="0" aria-valuemax="100" id="barWrap"><div id="bar"></div></div>
+      </section>
+
+      <section class="durations">
+        <div class="label">Timer</div>
+        <div class="chips" id="chips" role="radiogroup" aria-label="Timer duration">
+          <button role="radio" data-min="1">1 min</button>
+          <button role="radio" data-min="3">3</button>
+          <button role="radio" data-min="5">5</button>
+          <button role="radio" data-min="10">10</button>
+          <button role="radio" data-min="15">15</button>
+          <button role="radio" data-min="30">30</button>
+          <button role="radio" data-min="60">60</button>
+        </div>
+        <label class="custom">
+          <span>Custom</span>
+          <input id="custom" type="number" min="1" max="180" step="1" inputmode="numeric" placeholder="min" aria-label="Custom minutes" />
+          <span class="unit">min</span>
+        </label>
+      </section>
+
+      <section class="actions">
+        <button class="primary" id="primary" disabled>Start</button>
+        <button class="ghost" id="reset" disabled title="Put all the sand back in the top bulb (R)">Reset</button>
+      </section>
+
+      <details class="telemetry" id="telemetry">
+        <summary>Telemetry</summary>
+        <dl>
+          <dt>Top bulb</dt><dd id="tUpper">–</dd>
+          <dt>Crossing neck</dt><dd id="tCrossing">–</dd>
+          <dt>Bottom bulb</dt><dd id="tLower">–</dd>
+          <dt>Flow</dt><dd id="tFlow">–</dd>
+          <dt>Schedule</dt><dd id="tLag">–</dd>
+          <dt>Physics</dt><dd id="tPhys">–</dd>
+          <dt>Moving grains</dt><dd id="tActive">–</dd>
+          <dt>Render</dt><dd id="tFps">–</dd>
+        </dl>
+      </details>
+
+      <footer class="tools">
+        <button class="icon" id="sound" aria-pressed="true" title="Sound">Sound on</button>
+        <label class="quality" title="Number of simulated grains">
+          <select id="quality" aria-label="Simulated grains">
+            <option value="2000">2,000 grains · light</option>
+            <option value="3000" selected>3,000 grains</option>
+            <option value="4500">4,500 grains · fast CPU</option>
+          </select>
+        </label>
+        <button class="icon" id="view" title="Reset camera (V)">Reset view</button>
+      </footer>
+    </aside>
+
+    <div class="hint" id="hint">Drag to orbit · scroll to zoom · <kbd>Space</kbd> start/pause · <kbd>R</kbd> reset</div>
+    <div class="credit">Physics: <a href="https://rapier.rs" target="_blank" rel="noopener">Rapier</a> · Rendering: <a href="https://threejs.org" target="_blank" rel="noopener">three.js</a></div>
+
+    <div class="loader" id="loader">
+      <div class="loader-card">
+        <div class="loader-title">Pouring the sand</div>
+        <div class="loader-bar"><div id="loaderBar"></div></div>
+        <div class="loader-sub" id="loaderSub">Starting the physics engine…</div>
+      </div>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
